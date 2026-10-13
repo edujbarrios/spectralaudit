@@ -17,10 +17,12 @@ Requires Python 3.11+.
 pip install spectralaudit
 ```
 
-Before the first PyPI release, install from the repository:
+To work on the source code locally:
 
 ```bash
-pip install git+https://github.com/edujbarrios/spectralaudit.git
+git clone https://github.com/edujbarrios/spectralaudit.git
+cd spectralaudit
+python -m pip install -e ".[dev]"
 ```
 
 ## Quick start
