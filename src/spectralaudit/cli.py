@@ -36,7 +36,10 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "compare":
             report = compare_masters(args.original, args.master)
         elif args.command == "batch":
-            paths = sorted(p for p in Path(args.directory).rglob("*") if p.suffix.lower() in {".wav", ".flac"})
+            root = Path(args.directory)
+            if not root.is_dir():
+                raise ValueError(f"Batch input is not a directory: {root}")
+            paths = sorted(p for p in root.rglob("*") if p.is_file() and p.suffix.lower() in {".wav", ".flac"})
             data = []
             for path in paths:
                 try:
