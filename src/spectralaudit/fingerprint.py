@@ -110,7 +110,7 @@ def analyze_fingerprint(samples: np.ndarray, rate: int, *, low_hz: float = 5000,
         "mean_peak_residual_db": float(np.mean(peak_strengths)) if len(peaks) else None,
         "mean_peak_prominence_db": float(np.mean(properties["prominences"])) if len(peaks) else None,
         "persistence_fraction": persistence, "autocorrelation_spacing_hz": autocorr_spacing,
-        "autocorrelation_strength": autocorr, "candidate_pattern": candidate,
+        "autocorrelation_strength": round(autocorr, 12), "candidate_pattern": candidate,
         "interpretation": (
             "Persistent periodic high-frequency structure found; may be compatible with "
             "architecture-linked artifacts but is not unique to AI music or Suno."
