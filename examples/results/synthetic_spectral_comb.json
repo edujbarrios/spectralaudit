@@ -58,7 +58,7 @@
       "mean_peak_prominence_db": 25.027407687920448,
       "persistence_fraction": 1.0,
       "autocorrelation_spacing_hz": 441.4306640625,
-      "autocorrelation_strength": 0.9067868303451858,
+      "autocorrelation_strength": 0.906786830345,
       "candidate_pattern": true,
       "interpretation": "Persistent periodic high-frequency structure found; may be compatible with architecture-linked artifacts but is not unique to AI music or Suno."
     }
