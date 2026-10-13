@@ -19,3 +19,8 @@ blindly held-out corpus from unseen generators.
 
 The version 0.2.0 project currently has **no validated AI-detection sensitivity or
 specificity**. The absence of such a benchmark is intentionally disclosed.
+
+The `examples/assets/synthetic_spectral_comb.wav` fixture is generated
+by `examples/generate_demo.py`. `examples/synthetic_demo.py` regenerates
+its JSON, Markdown and TXT outputs. Tests assert the checked-in reports
+match the current implementation and the WAV SHA-256.
