@@ -35,7 +35,7 @@ class AuditReport:
     findings: dict[str, Any]
     limitations: list[str] = field(default_factory=list)
     interpretation: str = "Origin inconclusive: spectral characteristics do not establish provenance."
-    version: str = "0.1.0"
+    version: str = "0.2.0"
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -74,19 +74,3 @@ class AuditReport:
         )
         return target
 
-
-@dataclass
-class MasterComparison:
-    metadata: dict[str, Any]
-    spectral_changes: dict[str, Any]
-    new_artifacts: list[dict[str, Any]]
-    limitations: list[str]
-    interpretation: str = "Differences observed; no causal or generative-origin attribution."
-
-    def to_json(self, path: str | Path) -> Path:
-        target = Path(path)
-        target.write_text(json.dumps(asdict(self), indent=2, default=_json_default, allow_nan=False), encoding="utf-8")
-        return target
-
-    def to_html(self, path: str | Path) -> Path:
-        return AuditReport(self.metadata, {"comparison": asdict(self)}, self.limitations, self.interpretation).to_html(path)
