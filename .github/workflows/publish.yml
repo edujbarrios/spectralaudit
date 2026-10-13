@@ -1,0 +1,102 @@
+name: Publish Python package
+on:
+  release:
+    types: [published]
+  push:
+    branches: [main]  # one-time v0.1.0 bootstrap release commit only
+  workflow_dispatch:
+    inputs:
+      target:
+        type: choice
+        description: Upload only to TestPyPI (production release uses GitHub Release)
+        required: true
+        options: [testpypi]
+permissions:
+  contents: read
+jobs:
+  build:
+    if: >-
+      github.event_name != 'push' || startsWith(github.event.head_commit.message, 'release: v0.1.0')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m ruff check .
+      - run: python -m pytest -q
+      - name: Ensure release tag matches project version
+        if: github.event_name == 'release' || github.event_name == 'push'
+        run: |
+          python - <<'PYVER'
+          import os
+          import tomllib
+          with open('pyproject.toml', 'rb') as f:
+              expected = 'v' + tomllib.load(f)['project']['version']
+          actual = (os.environ['GITHUB_REF_NAME'] if os.environ['GITHUB_EVENT_NAME'] == 'release'
+                    else 'v0.1.0')
+          if actual != expected:
+              raise SystemExit(f'Release tag {actual!r} must equal {expected!r}')
+          PYVER
+      - run: python -m build
+      - run: python -m twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+          if-no-files-found: error
+  testpypi:
+    if: github.event_name == 'workflow_dispatch' && inputs.target == 'testpypi'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/project/spectralaudit/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+  bootstrap_release:
+    if: >-
+      github.event_name == 'push' && startsWith(github.event.head_commit.message, 'release: v0.1.0')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Create the v0.1.0 GitHub tag and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.1.0 --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title 'SpectralAudit 0.1.0' \
+            --notes 'First public release: offline spectral analysis, mastering comparison, CLI, HTML/JSON reports and scholarly citation.'
+  pypi:
+    if: >-
+      always() && needs.build.result == 'success' && (
+        (github.event_name == 'release' && github.event.action == 'published' && startsWith(github.event.release.tag_name, 'v') && github.event.release.prerelease == false) ||
+        (github.event_name == 'push' && startsWith(github.event.head_commit.message, 'release: v0.1.0') && needs.bootstrap_release.result == 'success')
+      )
+    needs: [build, bootstrap_release]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/spectralaudit/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
