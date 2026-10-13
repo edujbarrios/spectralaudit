@@ -1,4 +1,4 @@
-# Numerical algorithms (v0.1.0)
+# Numerical algorithms (v0.2.0)
 
 These are reproducible **measurements**, not AI-origin classifications.
 
@@ -41,14 +41,26 @@ Nonoverlapping 5-second windows (up to 48 uniformly spaced representatives)
 measure candidate cutoff and peak-spacing flags. Persistence is the fraction
 of analyzed windows flagged, not evidence of AI provenance.
 
-## Mastering comparison
+## Persistent high-frequency fingerprint (v0.2)
 
-A mono short excerpt is decimated and cross-correlated to estimate a sample
-offset between source and processed audio. Longer signals are then trimmed to
-their overlapping region. Gain is estimated as `dot(x,y)/dot(x,x)`; residual
-RMS is measured after removing that linear gain. Welch PSD band ratios describe
-spectral changes. Large edits, pitch shifts, compression and stereo changes
-may defeat linear alignment, so results must be independently verified.
+The `synthetic_patterns` module inspects nonoverlapping 3-second excerpts
+in 5–16 kHz (configurable). For each excerpt it computes a Welch PSD,
+removes a Gaussian-smoothed spectral envelope from the log-power spectrum,
+and aggregates residuals using the median across non-silent excerpts.
+
+Prominent peaks are found in the median residual. Temporal persistence
+means the fraction of analyzed excerpts that support these fixed-frequency
+peaks. The algorithm estimates median adjacent peak separation, its relative
+median absolute deviation, and normalized autocorrelation of the residual over
+60–1800 Hz frequency offsets.
+
+The experimental `candidate_pattern` requires two non-silent windows,
+five peaks, relative spacing MAD <= 0.20, peak persistence >= 0.50,
+and frequency autocorrelation >= 0.15. These are **not calibrated thresholds**.
+Purely harmonic electronic music can meet them. The method is independently
+implemented and **not a Suno model detector**. `origin_attribution` is
+always `not_supported`. When the band exceeds Nyquist or excerpts are too
+short, results are unavailable, not negative.
 
 ## References
 
