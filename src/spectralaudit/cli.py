@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import sys
 
-from . import __version__, analyze, compare_masters
+from . import __version__, analyze
 from .models import _json_default
 
 
@@ -14,16 +14,11 @@ def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="spectralaudit", description="Offline audio spectral forensics (NOT an AI-origin classifier)")
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
-    for command in ("analyze", "spectrum"):
+    for command in ("analyze", "spectrum", "fingerprint"):
         p = sub.add_parser(command)
         p.add_argument("file")
         p.add_argument("--json", dest="json_output")
         p.add_argument("--html")
-    p = sub.add_parser("compare")
-    p.add_argument("original")
-    p.add_argument("master")
-    p.add_argument("--json", dest="json_output")
-    p.add_argument("--html")
     p = sub.add_parser("batch")
     p.add_argument("directory")
     p.add_argument("--json", dest="json_output")
@@ -33,9 +28,7 @@ def make_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = make_parser().parse_args(argv)
     try:
-        if args.command == "compare":
-            report = compare_masters(args.original, args.master)
-        elif args.command == "batch":
+        if args.command == "batch":
             root = Path(args.directory)
             if not root.is_dir():
                 raise ValueError(f"Batch input is not a directory: {root}")
@@ -53,8 +46,10 @@ def main(argv: list[str] | None = None) -> int:
                 print(output)
             return 1 if any("error" in item for item in data) else 0
         else:
-            modules = ["high_frequency"] if args.command == "spectrum" else [
-                "high_frequency", "spectral_comb", "temporal", "confounders"]
+            modules = (["high_frequency"] if args.command == "spectrum" else
+                       ["synthetic_patterns"] if args.command == "fingerprint" else
+                       ["high_frequency", "spectral_comb", "synthetic_patterns",
+                        "temporal", "confounders"])
             report = analyze(args.file, modules=modules)
         if args.json_output:
             report.to_json(args.json_output)
