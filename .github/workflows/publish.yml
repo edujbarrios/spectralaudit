@@ -21,7 +21,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install build twine
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m ruff check .
+      - run: python -m pytest -q
+      - name: Ensure release tag matches project version
+        if: github.event_name == 'release'
+        run: |
+          python - <<'PYVER'
+          import os
+          import tomllib
+          with open('pyproject.toml', 'rb') as f:
+              expected = 'v' + tomllib.load(f)['project']['version']
+          actual = os.environ['GITHUB_REF_NAME']
+          if actual != expected:
+              raise SystemExit(f'Release tag {actual!r} must equal {expected!r}')
+          PYVER
       - run: python -m build
       - run: python -m twine check dist/*
       - uses: actions/upload-artifact@v4
