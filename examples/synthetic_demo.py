@@ -1,21 +1,18 @@
-"""Generate non-AI test audio and exercise the public API."""
+"""Synthetic demonstration: not a recording from a music generator."""
 from pathlib import Path
 import tempfile
-
 import numpy as np
 import soundfile as sf
-
-from spectralaudit import analyze, compare_masters
+from spectralaudit import analyze
 
 with tempfile.TemporaryDirectory() as folder:
-    path = Path(folder)
-    fs = 44100
-    t = np.arange(2 * fs) / fs
-    samples = 0.2 * np.sin(2 * np.pi * 440 * t)
-    sf.write(path / "premaster.wav", samples, fs)
-    sf.write(path / "master.wav", samples * .8, fs)
-    report = analyze(path / "master.wav")
-    print(report.interpretation)
-    print(report.findings["high_frequency"]["nyquist_hz"])
-    comparison = compare_masters(path / "premaster.wav", path / "master.wav")
-    print(comparison.metadata["estimated_gain"])
+    path=Path(folder)/"artificial_comb.wav"
+    rate=44100
+    t=np.arange(rate*9)/rate
+    x=0.03*np.random.default_rng(2026).normal(size=len(t))
+    for f in range(6100,14900,440):
+        x+=0.013*np.sin(2*np.pi*f*t)
+    sf.write(path,x,rate)
+    r=analyze(path)
+    print(r.interpretation)
+    print(r.findings["synthetic_patterns"])
