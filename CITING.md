@@ -7,7 +7,7 @@ GitHub displays a **Cite this repository** control from the root `CITATION.cff`.
 Suggested reference (adapt year and version to the *actually used release*):
 
 > Barrios, E. J. (2026). *SpectralAudit: Explainable Spectral Forensics for Music and
-> Mastered Audio* (Version 0.1.0) [Computer software].
+> Mastered Audio* (Version 0.2.0) [Computer software].
 > https://github.com/edujbarrios/spectralaudit
 
 Suggested BibTeX:
@@ -15,9 +15,9 @@ Suggested BibTeX:
 ```bibtex
 @software{barrios_spectralaudit_2026,
   author = {Barrios, Eduardo J.},
-  title = {SpectralAudit: Explainable Spectral Forensics for Music and Mastered Audio},
+  title = {SpectralAudit: Explainable Spectral Forensics for Music},
   year = {2026},
-  version = {0.1.0},
+  version = {0.2.0},
   url = {https://github.com/edujbarrios/spectralaudit}
 }
 ```
