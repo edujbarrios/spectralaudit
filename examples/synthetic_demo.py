@@ -1,18 +1,22 @@
-"""Synthetic demonstration: not a recording from a music generator."""
+"""Generate real JSON/Markdown/text reports from the checked-in example WAV.
+
+Run from the project root: python examples/synthetic_demo.py
+"""
 from pathlib import Path
-import tempfile
-import numpy as np
-import soundfile as sf
 from spectralaudit import analyze
 
-with tempfile.TemporaryDirectory() as folder:
-    path=Path(folder)/"artificial_comb.wav"
-    rate=44100
-    t=np.arange(rate*9)/rate
-    x=0.03*np.random.default_rng(2026).normal(size=len(t))
-    for f in range(6100,14900,440):
-        x+=0.013*np.sin(2*np.pi*f*t)
-    sf.write(path,x,rate)
-    r=analyze(path)
-    print(r.interpretation)
-    print(r.findings["synthetic_patterns"])
+SOURCE = Path("examples/assets/synthetic_spectral_comb.wav")
+RESULTS = Path("examples/results")
+
+
+def main() -> None:
+    RESULTS.mkdir(exist_ok=True, parents=True)
+    report = analyze(SOURCE, modules=["synthetic_patterns"])
+    report.to_json(RESULTS / "synthetic_spectral_comb.json")
+    report.to_markdown(RESULTS / "synthetic_spectral_comb.md")
+    report.to_text(RESULTS / "synthetic_spectral_comb.txt")
+    print(report.as_text())
+
+
+if __name__ == "__main__":
+    main()

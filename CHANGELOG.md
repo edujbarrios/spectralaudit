@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.0] - 2026-10-13
+
+- Replace HTML reports with JSON, Markdown and plain text; stdout defaults to text.
+- Add real, deterministic WAV demo and generated JSON/Markdown/TXT evidence with reproducibility tests.
+- Protect stereo spectra from near-perfect phase cancellation via channel fallback.
+- Simplify output dependencies; update README, scientific caution, tests and citation metadata.
+- Breaking: `--html` and `AuditReport.to_html()` removed.
+
+
 ## [0.2.0] - 2026-10-13
 
 - **Breaking change:** remove premaster/master comparison, its CLI, and public APIs.

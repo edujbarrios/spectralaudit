@@ -1,4 +1,4 @@
-# Numerical algorithms (v0.2.0)
+# Numerical algorithms (v0.3.0)
 
 These are reproducible **measurements**, not AI-origin classifications.
 
@@ -41,7 +41,7 @@ Nonoverlapping 5-second windows (up to 48 uniformly spaced representatives)
 measure candidate cutoff and peak-spacing flags. Persistence is the fraction
 of analyzed windows flagged, not evidence of AI provenance.
 
-## Persistent high-frequency fingerprint (v0.2)
+## Persistent high-frequency fingerprint (v0.3)
 
 The `synthetic_patterns` module inspects nonoverlapping 3-second excerpts
 in 5–16 kHz (configurable). For each excerpt it computes a Welch PSD,
@@ -67,3 +67,16 @@ short, results are unavailable, not negative.
 See [REFERENCES.md](../REFERENCES.md) for sources, attribution and the Deezer
 code licensing notice. All DSP implementations are independent; the project
 makes no claim to reproduce a published classifier or its accuracy.
+
+## Stereo cancellation fallback
+
+For stereo and multichannel signals, averaging may cancel phase-opposed content.
+If the channel-averaged RMS is below 15% of the strongest channel RMS, SpectralAudit
+analyzes that strongest channel instead and records this in `analysis_signal`.
+This prevents silent downmixes from hiding frequency peaks; it is not a provenance test.
+
+## Outputs
+
+Version 0.3 offers machine-readable JSON and auditable Markdown and plain text,
+with full evidence. HTML and SVG plotting reports were removed. See the real
+checked-in example waveform and report snapshots under `examples/`.

@@ -8,7 +8,7 @@ title: 'SpectralAudit: Explainable Spectral Forensics for Music'
 authors:
   - family-names: Barrios
     given-names: Eduardo J.
-version: 0.2.0
+version: 0.3.0
 license: Apache-2.0
 repository-code: https://github.com/edujbarrios/spectralaudit
 url: https://github.com/edujbarrios/spectralaudit
@@ -17,7 +17,7 @@ keywords:
   - digital signal processing
   - audio forensics
   - synthetic music artifacts
-  - mastering
+  - spectral reports
 abstract: >-
   Open-source Python software for offline, reproducible spectral measurements,
   heuristic periodicity analysis, and persistent high-frequency artifact diagnostics.
