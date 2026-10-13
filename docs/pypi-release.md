@@ -1,5 +1,10 @@
 # SpectralAudit release guide: GitHub Actions + PyPI Trusted Publishing
 
+> **v0.1.0 was successfully published on 13 October 2026.** The initial bootstrap
+> has been removed. For v0.1.1 and later, update the version and publish a normal
+> GitHub Release; the `.github/workflows/publish.yml` workflow handles PyPI
+> publishing through the existing `pypi` Trusted Publisher.
+
 **The workflows do not publish anything until explicitly triggered.**
 No long-lived PyPI tokens are stored in the repository.
 
