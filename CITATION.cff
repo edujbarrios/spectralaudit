@@ -4,11 +4,11 @@ message: >-
   datasets, benchmarks, or technical reports, please cite Eduardo J. Barrios
   using the citation provided by this file and identify the software version.
 type: software
-title: 'SpectralAudit: Explainable Spectral Forensics for Music and Mastered Audio'
+title: 'SpectralAudit: Explainable Spectral Forensics for Music'
 authors:
   - family-names: Barrios
     given-names: Eduardo J.
-version: 0.1.0
+version: 0.2.0
 license: Apache-2.0
 repository-code: https://github.com/edujbarrios/spectralaudit
 url: https://github.com/edujbarrios/spectralaudit
@@ -20,4 +20,4 @@ keywords:
   - mastering
 abstract: >-
   Open-source Python software for offline, reproducible spectral measurements,
-  heuristic periodicity analysis, and comparative audio mastering diagnostics.
+  heuristic periodicity analysis, and persistent high-frequency artifact diagnostics.

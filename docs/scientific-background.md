@@ -12,3 +12,8 @@ Welch PSD and Fourier spectral analysis. See [REFERENCES.md](../REFERENCES.md).
 Frequency-domain artifacts should always be interpreted with alternative
 causes in mind. A low-pass cutoff near 17 kHz can result from MP3 encoding,
 source format or EQ, not necessarily a generative pipeline.
+
+The v0.2.0 temporal-median spectral-residual fingerprint is independently
+implemented and makes no claim of equivalence to Deezer's detector or results.
+Its research context includes Suno/Udio, but output never establishes a source
+generator. See Afchar et al. (2025) and Dugelay et al. (2026).

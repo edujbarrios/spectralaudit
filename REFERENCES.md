@@ -14,11 +14,15 @@ are taken from the Deezer research implementation.
    *Transactions of the International Society for Music Information Retrieval*, 8(1).
    https://doi.org/10.5334/tismir.254 . Motivates explicit confounders and
    robustness warnings.
-3. Welch, P. D. (1967). **The Use of Fast Fourier Transform for the Estimation
+3. Dugelay, E., Barand, T., Campeas, B., Laouar, A., Afchar, D., & Hennequin, R. (2026).
+   **Improved Robustness in AI-Generated Music Detection**. arXiv:2607.27454.
+   https://arxiv.org/abs/2607.27454 . Motivates robustness warnings for
+   transformations; no learned model or filter is used by SpectralAudit.
+4. Welch, P. D. (1967). **The Use of Fast Fourier Transform for the Estimation
    of Power Spectra: A Method Based on Time Averaging Over Short, Modified
    Periodograms**. *IEEE Transactions on Audio and Electroacoustics*, 15(2),
    70–73. https://doi.org/10.1109/TAU.1967.1161901 . Basis of Welch PSD.
-4. Harris, F. J. (1978). **On the use of windows for harmonic analysis with the
+5. Harris, F. J. (1978). **On the use of windows for harmonic analysis with the
    discrete Fourier transform**. *Proceedings of the IEEE*, 66(1), 51–83.
    https://doi.org/10.1109/PROC.1978.10837 . Basis for Hann windowing.
 

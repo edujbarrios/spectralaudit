@@ -13,6 +13,6 @@ spectralaudit --help
 
 Windows PowerShell activation: `.venv\Scripts\Activate.ps1`.
 
-After a confirmed PyPI publication, use `python -m pip install spectralaudit`.
+For a published release, use `python -m pip install spectralaudit`.
 Audio support relies on the libsndfile build supplied by your SoundFile
 installation; WAV/FLAC availability may vary by platform.

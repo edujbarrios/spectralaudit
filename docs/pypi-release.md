@@ -1,14 +1,16 @@
 # SpectralAudit release guide: GitHub Actions + PyPI Trusted Publishing
 
-> **v0.1.0 was successfully published on 13 October 2026.** The initial bootstrap
+> **v0.2.0 was successfully published on 13 October 2026.** The initial bootstrap
 > has been removed. For v0.1.1 and later, update the version and publish a normal
 > GitHub Release; the `.github/workflows/publish.yml` workflow handles PyPI
 > publishing through the existing `pypi` Trusted Publisher.
 
+**v0.1.0 was already published; v0.2.0 removes mastering comparison and adds frequency fingerprints.**
+
 **The workflows do not publish anything until explicitly triggered.**
 No long-lived PyPI tokens are stored in the repository.
 
-## Author actions before the first release
+## Trusted Publisher settings (already configured for v0.2.0)
 
 1. Ensure project name `spectralaudit` remains available on [PyPI](https://pypi.org/) and [TestPyPI](https://test.pypi.org/); these are separate indexes.
 2. On GitHub, go to repository **Settings → Environments**. Create `pypi` and
@@ -37,11 +39,11 @@ python -m pip install -e '.[dev]'
 python -m pytest -q
 python -m build
 python -m twine check dist/*
-python -m pip install dist/spectralaudit-0.1.0-py3-none-any.whl
+python -m pip install dist/spectralaudit-0.2.0-py3-none-any.whl
 spectralaudit --version
 ```
 
-## First TestPyPI run
+## Optional TestPyPI run
 
 On GitHub → Actions → **Publish Python package** → Run workflow, select
 `target=testpypi`. After release, test an isolated installation. Note that
@@ -50,7 +52,7 @@ normal PyPI with care:
 
 ```bash
 python -m pip install --index-url https://test.pypi.org/simple/ \
-  --extra-index-url https://pypi.org/simple/ spectralaudit==0.1.0
+  --extra-index-url https://pypi.org/simple/ spectralaudit==0.2.0
 ```
 
 For stronger supply-chain guarantees, pin dependencies or install them from
@@ -61,11 +63,11 @@ PyPI first and install only the distribution from TestPyPI using `--no-deps`.
 Once approved and green, create the signed or annotated Git tag:
 
 ```bash
-git tag -a v0.1.0 -m "SpectralAudit v0.1.0"
-git push origin v0.1.0
+git tag -a v0.2.0 -m "SpectralAudit v0.2.0"
+git push origin v0.2.0
 ```
 
-In GitHub, publish a Release for `v0.1.0` (not a draft). This triggers
+In GitHub, publish a Release for `v0.2.0` (not a draft). This triggers
 `.github/workflows/publish.yml` with the `pypi` environment, protected
 approval and OIDC credentials. The publication job does not execute package
 build scripts; it only downloads previously built distribution artifacts.

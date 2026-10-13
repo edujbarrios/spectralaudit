@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "spectralaudit"
-version = "0.1.0"
-description = "Explainable, offline DSP for spectral audio forensics and mastering comparisons"
+version = "0.2.0"
+description = "Explainable, offline DSP for spectral audio forensics and persistent frequency-pattern analysis"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [{name = "Eduardo J. Barrios"}]
-keywords = ["audio", "music", "spectral-analysis", "forensics", "dsp", "mastering"]
+keywords = ["audio", "music", "spectral-analysis", "forensics", "dsp", "synthetic-music"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",

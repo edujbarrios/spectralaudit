@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0] - 2026-10-13
+
+- **Breaking change:** remove premaster/master comparison, its CLI, and public APIs.
+- Add independent deterministic spectral fingerprint analysis of persistent high-frequency peaks (temporal median, frequency autocorrelation, and peak-spacing metrics).
+- Add `spectralaudit fingerprint` CLI and `analyze_fingerprint` Python API.
+- Add synthetic-signal tests and cautions against Suno/AI attribution claims.
+- Add PyPI badges and full research citations directly to README.
+
 ## [0.1.0] - 2026-10-13
 
 Initial implementation of offline spectral diagnostics: WAV/FLAC ingestion,

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import numpy as np
 from scipy import signal
+from scipy.integrate import trapezoid
 
 DEFAULT_BANDS = [(5000, 10000), (10000, 12000), (12000, 16000),
                  (16000, 17000), (17000, 19000), (19000, 21000)]
@@ -21,7 +22,7 @@ def _power(f: np.ndarray, p: np.ndarray, lo: float, hi: float) -> float:
     mask = (f >= lo) & (f <= hi)
     if np.count_nonzero(mask) < 2:
         return 0.0
-    return float(np.trapezoid(p[mask], f[mask]))
+    return float(trapezoid(p[mask], f[mask]))
 
 
 def estimate_cutoff(f: np.ndarray, p: np.ndarray, *, min_hz: float = 3000) -> dict:
