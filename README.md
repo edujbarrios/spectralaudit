@@ -1,88 +1,79 @@
 # SpectralAudit
 
-**Explainable, offline spectral forensics for music and mastered audio.**
+**Offline spectral analysis for music and final masters.** A Python library by **Eduardo J. Barrios**.
 
 [![CI](https://github.com/edujbarrios/spectralaudit/actions/workflows/ci.yml/badge.svg)](https://github.com/edujbarrios/spectralaudit/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
-**Author:** Eduardo J. Barrios · [How to cite](CITING.md) · [Scientific references](REFERENCES.md)
+SpectralAudit measures **high-frequency energy, spectral cutoffs and regularly spaced spectral peaks** in WAV/FLAC audio. It also compares a premaster and final master to reveal measurable differences between versions. Processing runs **locally** with NumPy and SciPy: no LLMs, AI models or external APIs.
 
-> **Not an AI music classifier.** No threshold at 17 kHz—or any single spectral
-> artifact—proves that a recording was generated with artificial intelligence.
-> This library reports numerical measurements and explicit limitations.
+**Important:** SpectralAudit is **not a validated detector of AI-generated music**. Frequencies above 17 kHz, low-pass cutoffs and periodic peaks do **not** prove AI origin. Results are measurements with stated limitations.
 
-## What works in v0.1
+## Install
 
-- Analyze WAV/FLAC (local file), sample rate, peak, RMS and SHA-256.
-- Measure Welch PSD across high-frequency bands, respecting Nyquist limits.
-- Estimate candidate spectral cutoff knees using a documented heuristic.
-- Inspect spectral-envelope residuals for regularly spaced peaks.
-- Evaluate periodicity candidates across time windows.
-- Flag possible conventional confounders, rather than assert AI origin.
-- Compare aligned premaster/master audio, gain estimates and spectral changes.
-- Export JSON and standalone HTML with detailed numerical evidence.
-- CLI: `analyze`, `spectrum`, `compare`, and `batch`.
-
-**Status:** early research software. Cutoff and periodicity thresholds are
-experimental, uncalibrated heuristics. They are not a validated AI-origin detector.
-
-## Install (development checkout)
+Requires Python 3.11+.
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate    # Windows PowerShell: .venv\Scripts\Activate.ps1
-python -m pip install -e ".[dev]"
-pytest -q
+pip install spectralaudit
 ```
 
-Once released on PyPI, install with `pip install spectralaudit`.
+Before the first PyPI release, install from the repository:
 
-## Python quickstart
+```bash
+pip install git+https://github.com/edujbarrios/spectralaudit.git
+```
+
+## Quick start
+
+Analyze a master and export an HTML and JSON report:
+
+```bash
+spectralaudit analyze final_master.wav --html report.html --json report.json
+```
+
+Inspect frequency bands, compare two versions, or analyze a folder:
+
+```bash
+spectralaudit spectrum final_master.wav
+spectralaudit compare premaster.wav final_master.wav --html comparison.html
+spectralaudit batch ./music --json batch.json
+```
+
+Python API:
 
 ```python
 from spectralaudit import analyze, compare_masters
 
 report = analyze("final_master.wav")
-print(report.findings["high_frequency"])
-print(report.interpretation)
-report.to_json("master.json")
-report.to_html("master.html")
+print(report.findings["high_frequency"]["candidate_cutoff"])
+print(report.findings["spectral_comb"]["candidate_periodicity"])
+print(report.interpretation)  # Origin inconclusive: ...
+report.to_html("report.html")
 
 comparison = compare_masters("premaster.wav", "final_master.wav")
 print(comparison.spectral_changes)
 ```
 
-## CLI
+## What it measures
 
-```bash
-spectralaudit analyze final_master.wav --json result.json --html report.html
-spectralaudit spectrum final_master.wav
-spectralaudit compare premaster.wav final_master.wav --html comparison.html
-spectralaudit batch music/ --json batch.json
-```
+- **Frequency bands:** Welch power spectrum, relative band energy and candidate high-frequency cutoff, respecting the file's Nyquist limit.
+- **Periodic peaks:** spacing of narrow spectral peaks; also possible in conventional harmonic music.
+- **Time:** persistence of candidate patterns in successive audio windows.
+- **Alternative explanations:** flags for sample-rate and processing-related ambiguities.
+- **Master comparison:** estimated time offset, gain and band-level spectral differences.
 
-## Implementation and limits
+The same inputs and settings produce deterministic analyses. Detection thresholds are **exploratory heuristics**, not calibrated AI-origin probabilities. Large files are read into memory; input audio is never modified. See [Methods](docs/algorithms.md) and [Limitations](docs/limitations.md).
 
-Algorithms are based on NumPy/SciPy/SoundFile; no LLM, neural model, API key or
-network access is required. Welch PSD, robust smoothed log-spectrum slope and
-peak-spacing heuristics are independently implemented. Spectral periodicity
-also arises in normal musical instrument harmonics. Current full-file reading
-uses RAM proportional to the file duration. Files remain unmodified.
+## Research, citation and license
 
-See [Algorithm notes](docs/algorithms.md) and [Limitations](docs/limitations.md).
+If you use SpectralAudit in research, **please cite Eduardo J. Barrios and the version used**. See [CITATION.cff](CITATION.cff) and [how to cite](CITING.md).
 
-## Open source and scholarly citation
+Selected scientific references:
 
-Copyright 2026 **Eduardo J. Barrios**. Licensed under **Apache-2.0**, with
-applicable attribution/NOTICE retention obligations for redistributions.
+- Afchar et al. (2025), *A Fourier Explanation of AI-music Artifacts* ([paper](https://arxiv.org/abs/2506.19108)).
+- Cros Vila et al. (2025), *The AI Music Arms Race* ([DOI](https://doi.org/10.5334/tismir.254)).
+- Welch (1967), *The Use of Fast Fourier Transform for the Estimation of Power Spectra* ([DOI](https://doi.org/10.1109/TAU.1967.1161901)).
 
-**If you use SpectralAudit in research, please cite the author and the software
-version using [`CITATION.cff`](CITATION.cff) or [`CITING.md`](CITING.md).**
-Academic citation is requested; this is not an added legal restriction under
-Apache-2.0. See [NOTICE](NOTICE).
+Full bibliography and implementation distinctions: [REFERENCES.md](REFERENCES.md).
 
-## Scientific boundaries
-
-A frequency cutoff, spectral periodicity, or anomalous high-frequency energy is
-not a validated proof of synthetic origin. Low sample rates, EQ, lossy codecs,
-and harmonically rich instruments can confound interpretation. Results should
-be reported as measurements and limitations, not a probability of AI generation.
+**Copyright © 2026 Eduardo J. Barrios.** Open source under the [Apache License 2.0](LICENSE); see [NOTICE](NOTICE). Redistribution must preserve applicable notices. Academic citation is requested, not an additional legal condition of the license.
