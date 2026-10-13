@@ -6,7 +6,8 @@ permissions:
   contents: read
 jobs:
   demo:
-    if: github.event.head_commit.message == 'chore: regenerate sample WAV and snapshots'
+    if: >-
+      github.event.head_commit.message == 'chore: regenerate sample WAV and snapshots'
     runs-on: ubuntu-latest
     permissions:
       contents: write
