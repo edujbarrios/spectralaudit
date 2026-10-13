@@ -1,0 +1,70 @@
+"""Command-line interface with explicit file outputs."""
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+import sys
+
+from . import __version__, analyze, compare_masters
+from .models import _json_default
+
+
+def make_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="spectralaudit", description="Offline audio spectral forensics (NOT an AI-origin classifier)")
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    sub = parser.add_subparsers(dest="command", required=True)
+    for command in ("analyze", "spectrum"):
+        p = sub.add_parser(command)
+        p.add_argument("file")
+        p.add_argument("--json", dest="json_output")
+        p.add_argument("--html")
+    p = sub.add_parser("compare")
+    p.add_argument("original")
+    p.add_argument("master")
+    p.add_argument("--json", dest="json_output")
+    p.add_argument("--html")
+    p = sub.add_parser("batch")
+    p.add_argument("directory")
+    p.add_argument("--json", dest="json_output")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = make_parser().parse_args(argv)
+    try:
+        if args.command == "compare":
+            report = compare_masters(args.original, args.master)
+        elif args.command == "batch":
+            paths = sorted(p for p in Path(args.directory).rglob("*") if p.suffix.lower() in {".wav", ".flac"})
+            data = []
+            for path in paths:
+                try:
+                    data.append({"path": str(path), "report": analyze(path).as_dict()})
+                except (OSError, ValueError, RuntimeError) as ex:
+                    data.append({"path": str(path), "error": str(ex)})
+            output = json.dumps({"results": data}, indent=2, default=_json_default, allow_nan=False)
+            if args.json_output:
+                Path(args.json_output).write_text(output, encoding="utf-8")
+            else:
+                print(output)
+            return 1 if any("error" in item for item in data) else 0
+        else:
+            modules = ["high_frequency"] if args.command == "spectrum" else [
+                "high_frequency", "spectral_comb", "temporal", "confounders"]
+            report = analyze(args.file, modules=modules)
+        if args.json_output:
+            report.to_json(args.json_output)
+        if getattr(args, "html", None):
+            report.to_html(args.html)
+        if not args.json_output:
+            print(json.dumps(report.as_dict() if hasattr(report, "as_dict") else vars(report),
+                             indent=2, default=_json_default, allow_nan=False))
+        return 0
+    except (OSError, ValueError, RuntimeError) as exc:
+        print(f"spectralaudit: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

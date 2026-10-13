@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spectralaudit"
+version = "0.1.0"
+description = "Explainable, offline DSP for spectral audio forensics and mastering comparisons"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [{name = "Eduardo J. Barrios"}]
+keywords = ["audio", "music", "spectral-analysis", "forensics", "dsp", "mastering"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Topic :: Multimedia :: Sound/Audio :: Analysis",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: OS Independent",
+]
+dependencies = ["numpy>=1.26", "scipy>=1.11", "soundfile>=0.12"]
+
+[project.optional-dependencies]
+plot = ["matplotlib>=3.8"]
+dev = ["pytest>=8", "ruff>=0.6", "build>=1.2", "twine>=5", "cffconvert>=2.0"]
+
+[project.scripts]
+spectralaudit = "spectralaudit.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/edujbarrios/spectralaudit"
+Source = "https://github.com/edujbarrios/spectralaudit"
+Issues = "https://github.com/edujbarrios/spectralaudit/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

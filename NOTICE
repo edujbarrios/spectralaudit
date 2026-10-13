@@ -1,0 +1,12 @@
+SpectralAudit
+Copyright 2026 Eduardo J. Barrios
+https://github.com/edujbarrios/spectralaudit
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+When distributing the software or derivative distributions, retain the
+applicable copyright, attribution, and NOTICE material as required by the license.
+
+Academic citation request (not an additional license restriction):
+If SpectralAudit informs a research paper, thesis, dataset, or scientific report,
+please cite Eduardo J. Barrios and identify the used software version as described
+in CITATION.cff and CITING.md.
