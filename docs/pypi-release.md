@@ -5,7 +5,7 @@
 > GitHub Release; the `.github/workflows/publish.yml` workflow handles PyPI
 > publishing through the existing `pypi` Trusted Publisher.
 
-**v0.1.0 was already published; v0.2.0 removes mastering comparison and adds frequency fingerprints.**
+**v0.2.0 was published on 13 October 2026. For future versions, update version metadata, pass CI, create the matching GitHub Release and use the existing OIDC Trusted Publisher.**
 
 **The workflows do not publish anything until explicitly triggered.**
 No long-lived PyPI tokens are stored in the repository.
