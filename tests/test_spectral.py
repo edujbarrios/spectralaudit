@@ -27,11 +27,11 @@ def test_conservative_origin(audio_factory, tmp_path):
     assert report.metadata["sha256"]
     assert report.findings["high_frequency"]["bands"]
     json_path = report.to_json(tmp_path / "report.json")
-    html_path = report.to_html(tmp_path / "report.html")
+    md_path = report.to_markdown(tmp_path / "report.md")
     data = json.loads(json_path.read_text())
     assert data["metadata"]["samplerate_hz"] == 44100
-    assert "SpectralAudit" in html_path.read_text()
-    assert "<svg" in html_path.read_text()
+    assert "SpectralAudit" in md_path.read_text()
+    assert "## Findings" in md_path.read_text()
 
 
 def test_peak_frequency():
