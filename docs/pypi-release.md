@@ -1,16 +1,19 @@
-# SpectralAudit release guide: GitHub Actions + PyPI Trusted Publishing
+# SpectralAudit release guide: PyPI Trusted Publishing
 
-> **v0.2.0 was successfully published on 13 October 2026.** The initial bootstrap
-> has been removed. For v0.1.1 and later, update the version and publish a normal
-> GitHub Release; the `.github/workflows/publish.yml` workflow handles PyPI
-> publishing through the existing `pypi` Trusted Publisher.
+**v0.3.0 was published on 13 October 2026.** GitHub Actions uploaded the wheel
+and sdist successfully using OpenID Connect (OIDC) Trusted Publishing.
 
-**v0.2.0 was published on 13 October 2026. For future versions, update version metadata, pass CI, create the matching GitHub Release and use the existing OIDC Trusted Publisher.**
+For future versions, update `pyproject.toml`, `src/spectralaudit/__init__.py`,
+`src/spectralaudit/models.py`, `CITATION.cff`, `CITING.md` and
+`CHANGELOG.md`. Run tests and merge a PR into `main`, then create the
+matching GitHub Release (for example, `v0.3.1`).
 
-**The workflows do not publish anything until explicitly triggered.**
-No long-lived PyPI tokens are stored in the repository.
+Production publication runs **only on a published GitHub Release**.
+The workflow checks tests, lint and tag/version consistency and then uses
+the protected `pypi` GitHub environment and its Trusted Publisher.
+No permanent PyPI API tokens are stored.
 
-## Trusted Publisher settings (already configured for v0.2.0)
+## Trusted Publisher settings (already configured for v0.3.0)
 
 1. Ensure project name `spectralaudit` remains available on [PyPI](https://pypi.org/) and [TestPyPI](https://test.pypi.org/); these are separate indexes.
 2. On GitHub, go to repository **Settings → Environments**. Create `pypi` and
@@ -63,11 +66,11 @@ PyPI first and install only the distribution from TestPyPI using `--no-deps`.
 Once approved and green, create the signed or annotated Git tag:
 
 ```bash
-git tag -a v0.2.0 -m "SpectralAudit v0.2.0"
-git push origin v0.2.0
+git tag -a v0.3.0 -m "SpectralAudit v0.3.0"
+git push origin v0.3.0
 ```
 
-In GitHub, publish a Release for `v0.2.0` (not a draft). This triggers
+In GitHub, publish a Release for `v0.3.0` (not a draft). This triggers
 `.github/workflows/publish.yml` with the `pypi` environment, protected
 approval and OIDC credentials. The publication job does not execute package
 build scripts; it only downloads previously built distribution artifacts.
