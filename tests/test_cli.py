@@ -15,3 +15,12 @@ def test_cli_report(audio_factory, tmp_path):
 def test_cli_error(capsys):
     assert main(["analyze", "/does/not/exist.wav"]) == 2
     assert "spectralaudit" in capsys.readouterr().err
+
+def test_batch_missing_directory_fails(capsys, tmp_path):
+    assert main(["batch", str(tmp_path / "missing")]) == 2
+    assert "not a directory" in capsys.readouterr().err
+
+
+def test_batch_empty_directory_is_valid(tmp_path, capsys):
+    assert main(["batch", str(tmp_path)]) == 0
+    assert json.loads(capsys.readouterr().out) == {"results": []}
