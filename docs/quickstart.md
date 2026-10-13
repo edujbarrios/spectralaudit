@@ -1,27 +1,21 @@
-# Quickstart
-
-```python
-from spectralaudit import analyze, compare_masters, audit_pipeline
-
-r = analyze('master.wav')
-print(r.metadata['samplerate_hz'])
-print(r.findings['high_frequency']['bands'])
-print(r.interpretation)
-r.to_json('report.json')
-r.to_html('report.html')
-
-comparison = compare_masters('premaster.wav', 'master.wav')
-print(comparison.spectral_changes)
-
-multi = audit_pipeline({'source': 'source.wav', 'premaster': 'premaster.wav', 'master': 'master.wav'})
-print(multi['stage_comparisons'])
-```
-
-CLI:
+# Quickstart (v0.2)
 
 ```bash
-spectralaudit analyze master.wav --json report.json --html report.html
-spectralaudit compare premaster.wav master.wav --json comparison.json
+pip install -U spectralaudit
+spectralaudit analyze song.wav --json report.json --html report.html
+spectralaudit fingerprint song.wav --json fingerprint.json
 ```
 
-Results are structured, inspectable numerical diagnostics, **not an AI verdict**.
+```python
+from spectralaudit import analyze, analyze_fingerprint, load_audio
+
+report = analyze("song.wav")
+print(report.findings["synthetic_patterns"]["candidate_pattern"])
+print(report.findings["synthetic_patterns"]["interpretation"])
+report.to_html("report.html")
+
+audio = load_audio("song.wav")
+print(analyze_fingerprint(audio.mono, audio.rate))
+```
+
+The output describes measured structures, not an AI/Suno provenance verdict.
