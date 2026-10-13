@@ -15,7 +15,8 @@ permissions:
   contents: read
 jobs:
   build:
-    if: github.event_name != 'push' || startsWith(github.event.head_commit.message, 'release: v0.1.0')
+    if: >-
+      github.event_name != 'push' || startsWith(github.event.head_commit.message, 'release: v0.1.0')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -65,7 +66,8 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
   bootstrap_release:
-    if: github.event_name == 'push' && startsWith(github.event.head_commit.message, 'release: v0.1.0')
+    if: >-
+      github.event_name == 'push' && startsWith(github.event.head_commit.message, 'release: v0.1.0')
     needs: build
     runs-on: ubuntu-latest
     permissions:
