@@ -1,6 +1,6 @@
 # Scope, interpretation and limitations
 
-**No binary detection or model-based AI attribution is implemented.** The
+**No validated AI/Suno origin attribution is implemented.** The
 program is an offline DSP measurement tool. Use `report.interpretation` rather
 than inferring AI-origin probabilities from heuristic findings.
 
@@ -11,10 +11,8 @@ than inferring AI-origin probabilities from heuristic findings.
 - The original encoding chain cannot be recovered from one processed WAV.
 - The current implementation loads entire files into memory, which may be
   expensive for long songs or high sample rates.
-- Peak spacing and cutoff heuristics lack real-dataset sensitivity and
-  specificity evaluation; v0.1 makes no accuracy claims.
-- Master comparison assumes sufficiently similar waveforms, gain and time
-  alignment; remixes, extensive time-stretching and nonlinear editing can fail.
+- Peak spacing, temporal fingerprint and cutoff heuristics lack real-dataset
+  sensitivity and specificity evaluation; v0.2 makes no accuracy claims.
 - HTML reports include a lightweight PSD figure when the source audio remains
   available; they do not show a full STFT spectrogram or interactive plots.
 
