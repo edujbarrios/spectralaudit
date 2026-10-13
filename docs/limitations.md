@@ -12,9 +12,12 @@ than inferring AI-origin probabilities from heuristic findings.
 - The current implementation loads entire files into memory, which may be
   expensive for long songs or high sample rates.
 - Peak spacing, temporal fingerprint and cutoff heuristics lack real-dataset
-  sensitivity and specificity evaluation; v0.2 makes no accuracy claims.
-- HTML reports include a lightweight PSD figure when the source audio remains
+  sensitivity and specificity evaluation; v0.3 makes no accuracy claims.
   available; they do not show a full STFT spectrogram or interactive plots.
 
 If decisions affect artists' livelihoods, intellectual property disputes or
 platform enforcement, **do not use SpectralAudit alone** as evidence of provenance.
+
+Version 0.3 reports use JSON, Markdown and plain text only. Stereo phase-cancellation
+fallback chooses a channel for technical analysis and is not representative of
+all stereo listening environments.
